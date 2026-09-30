@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Task Manager</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif; background: #ecfeff; color: #1e293b; }
+    header { background: linear-gradient(135deg, #0891b2, #0e7490); color: #fff; text-align: center; padding: 28px 16px; }
+    header h1 { font-size: 1.8rem; }
+    header p { opacity: .85; font-size: .9rem; }
+    main { max-width: 640px; margin: 24px auto; padding: 0 16px; }
+    .card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 16px; }
+    .card h2 { font-size: 1.05rem; margin-bottom: 10px; border-left: 4px solid #0891b2; padding-left: 10px; }
+    form { display: flex; gap: 8px; }
+    input[type=text] { flex: 1; min-width: 0; padding: 10px 14px; font-size: 1rem; border: 2px solid #cbd5e1; border-radius: 8px; }
+    input[type=text]:focus { outline: none; border-color: #0891b2; box-shadow: 0 0 0 4px rgba(8,145,178,.2); }
+    button { border: none; border-radius: 8px; padding: 10px 18px; font-size: 1rem; cursor: pointer; white-space: nowrap; }
+    .add-btn { background: #0891b2; color: #fff; }
+    .add-btn:hover { background: #0e7490; }
+    .error { color: #dc2626; font-size: .9rem; margin-top: 8px; min-height: 1.4em; }
+    ul { list-style: none; }
+    li { display: flex; align-items: center; gap: 12px; padding: 12px 4px; border-bottom: 1px solid #e2e8f0; }
+    li:last-child { border-bottom: none; }
+    li input { width: 20px; height: 20px; accent-color: #16a34a; flex-shrink: 0; cursor: pointer; }
+    li label { flex: 1; min-width: 0; overflow-wrap: anywhere; cursor: pointer; }
+    li.done label { text-decoration: line-through; color: #64748b; }
+    .del-btn { background: #fee2e2; color: #dc2626; padding: 6px 14px; font-size: .9rem; }
+    .del-btn:hover { background: #dc2626; color: #fff; }
+    .stats { text-align: center; font-weight: bold; }
+    .empty { text-align: center; color: #64748b; padding: 12px; }
+    .badge { display: inline-block; background: #cffafe; color: #0e7490; font-size: .75rem; padding: 2px 8px; border-radius: 999px; margin-top: 6px; }
+    @media (max-width: 480px) {
+      form { flex-direction: column; }
+      .add-btn { width: 100%; }
+      main { padding: 0 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- React 18 + Babel（CDN），讓瀏覽器直接執行 JSX -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    function App() {
+      // 使用 state 保存任務陣列；呼叫 setTasks 後 React 會自動重新渲染畫面
+      const [tasks, setTasks] = useState([
+        { id: 1, text: "完成 Web App 實作", completed: false },
+        { id: 2, text: "完成 React 練習", completed: true },
+      ]);
+      const [text, setText] = useState("");
+      const [error, setError] = useState("");
+
+      // 新增任務
+      function handleAdd(e) {
+        e.preventDefault();
+        const trimmed = text.trim();
+        if (!trimmed) { setError("⚠ 請輸入任務名稱"); return; }
+        setTasks([...tasks, { id: Date.now(), text: trimmed, completed: false }]);
+        setText("");
+        setError("");
+      }
+
+      // 完成／取消完成
+      function toggleTask(id) {
+        setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+      }
+
+      // 刪除任務
+      function deleteTask(id) {
+        setTasks(tasks.filter(t => t.id !== id));
+      }
+
+      const doneCount = tasks.filter(t => t.completed).length;
+
+      return (
+        <>
+          <header>
+            <h1>My Task Manager</h1>
+            <p>React 版本</p>
+            <span className="badge">Powered by React</span>
+          </header>
+          <main>
+            <section className="card">
+              <h2>新增任務</h2>
+              <form onSubmit={handleAdd}>
+                <input
+                  type="text"
+                  aria-label="任務名稱"
+                  placeholder="例如：完成期末專題"
+                  value={text}
+                  onChange={e => setText(e.target.value)}
+                />
+                <button type="submit" className="add-btn">新增</button>
+              </form>
+              <p className="error" role="alert">{error}</p>
+            </section>
+
+            <section className="card">
+              <h2>任務清單</h2>
+              {tasks.length === 0 && <p className="empty">目前沒有任務</p>}
+              <ul>
+                {tasks.map(task => (
+                  <li key={task.id} className={task.completed ? "done" : ""}>
+                    <input
+                      type="checkbox"
+                      id={"r-" + task.id}
+                      checked={task.completed}
+                      onChange={() => toggleTask(task.id)}
+                    />
+                    <label htmlFor={"r-" + task.id}>{task.text}</label>
+                    <button className="del-btn" onClick={() => deleteTask(task.id)}>刪除</button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section className="card stats">
+              共 {tasks.length} 項　未完成 {tasks.length - doneCount} 項　已完成 {doneCount} 項
+            </section>
+          </main>
+        </>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
