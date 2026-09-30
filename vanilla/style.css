@@ -1,0 +1,169 @@
+/* ===== 基本設定 ===== */
+:root {
+  --primary: #4f46e5;
+  --primary-dark: #3730a3;
+  --danger: #dc2626;
+  --danger-dark: #991b1b;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+  --border: #cbd5e1;
+  --done: #16a34a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ===== 頁首 ===== */
+.app-header {
+  background: linear-gradient(135deg, var(--primary), #7c3aed);
+  color: #fff;
+  text-align: center;
+  padding: 32px 16px;
+}
+.app-header h1 { font-size: 2rem; letter-spacing: 1px; }
+.subtitle { opacity: .85; font-size: .95rem; }
+
+/* ===== 主要內容 ===== */
+.container {
+  max-width: 720px;
+  margin: 24px auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, .08);
+}
+.card h2 {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  padding-left: 10px;
+  border-left: 4px solid var(--primary);
+}
+
+/* ===== 新增任務表單 ===== */
+.field-label { display: block; font-size: .9rem; color: var(--muted); margin-bottom: 6px; }
+.input-row { display: flex; gap: 8px; }
+
+.task-input {
+  flex: 1;
+  min-width: 0;             /* 讓輸入框在窄螢幕可縮小，不會撐破畫面 */
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  transition: border-color .2s, box-shadow .2s;
+}
+/* :focus 效果 */
+.task-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, .2);
+}
+.task-input.invalid { border-color: var(--danger); }
+
+.error-msg { color: var(--danger); font-size: .9rem; margin-top: 8px; min-height: 1.4em; }
+
+/* ===== 按鈕 ===== */
+.btn {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .2s, transform .1s;
+}
+.btn:active { transform: scale(.96); }
+.btn-primary { background: var(--primary); color: #fff; }
+/* :hover 效果：滑鼠移過變深色 */
+.btn-primary:hover { background: var(--primary-dark); }
+.btn:focus-visible, .filter-btn:focus-visible { outline: 3px solid #a5b4fc; outline-offset: 2px; }
+
+/* ===== 篩選按鈕 ===== */
+.filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-btn {
+  flex: 1;
+  padding: 8px 16px;
+  font-size: .95rem;
+  background: #fff;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.filter-btn:hover { background: #eef2ff; }
+.filter-btn.active { background: var(--primary); color: #fff; }
+
+/* ===== 任務清單 ===== */
+.task-list { list-style: none; }
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  transition: background .2s;
+}
+.task-item:last-child { border-bottom: none; }
+.task-item:hover { background: #f8fafc; }
+
+.task-item input[type="checkbox"] {
+  width: 20px; height: 20px;
+  accent-color: var(--done);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.task-text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;   /* 長文字自動換行，不超出螢幕 */
+  cursor: pointer;
+}
+.task-item.completed .task-text { text-decoration: line-through; color: var(--muted); }
+
+.delete-btn {
+  background: #fee2e2;
+  color: var(--danger);
+  padding: 6px 14px;
+  font-size: .9rem;
+  flex-shrink: 0;
+}
+.delete-btn:hover { background: var(--danger); color: #fff; }
+
+.empty-msg { text-align: center; color: var(--muted); padding: 16px; }
+
+/* ===== 統計 ===== */
+.stats { text-align: center; font-weight: bold; }
+.stats span { display: inline-block; margin: 0 8px; }
+.stats .num { color: var(--primary); font-size: 1.2rem; }
+
+.app-footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 16px; }
+
+/* ===== RWD：480px 以下 ===== */
+@media (max-width: 480px) {
+  .app-header { padding: 20px 12px; }
+  .app-header h1 { font-size: 1.5rem; }
+  .container { margin: 12px auto; padding: 0 10px; }
+  .card { padding: 14px; }
+  .input-row { flex-direction: column; }      /* 輸入框與按鈕上下排列 */
+  .input-row .btn { width: 100%; }
+  .filter-btn { padding: 8px 6px; }
+  .task-item { padding: 10px 4px; gap: 8px; }
+  .stats span { display: block; margin: 2px 0; }  /* 統計資訊直向排列 */
+}
