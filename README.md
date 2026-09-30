@@ -4,13 +4,13 @@
 
 | 版本 | 網址 |
 |---|---|
-| 首頁 | https://yaoyao913.github.io/task-manager/ |
-| JavaScript 版（完整功能） | https://yaoyao913.github.io/task-manager/vanilla/ |
-| React 版 | https://yaoyao913.github.io/task-manager/react/ |
+| 首頁 | https://yaoyao913913.github.io/task-manager/ |
+| JavaScript 版（完整功能） | https://yaoyao913913.github.io/task-manager/vanilla/ |
+| React 版 | https://yaoyao913913.github.io/task-manager/react/ |
 
 ## ② 程式碼（公開 repository，免登入）
 
-Repository：https://github.com/yaoyao913/task-manager
+Repository：https://github.com/yaoyao913913/task-manager
 
 | 內容 | 檔案 |
 |---|---|
