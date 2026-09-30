@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Task Manager</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 頁首：網頁標題 -->
+  <header class="app-header">
+    <h1>My Task Manager</h1>
+    <p class="subtitle">Web App 個人課堂實作</p>
+  </header>
+
+  <main class="container">
+    <!-- ★★★ 最重要的語意化 HTML 區域：新增任務 ★★★
+         section 代表一個獨立的功能區塊；
+         form + label + input + button 讓瀏覽器與螢幕閱讀器知道
+         「這是一個可輸入並送出的表單」，label 的 for 對應 input 的 id，
+         點擊文字即可聚焦輸入框，也支援按 Enter 送出。 -->
+    <section class="card add-section" aria-labelledby="add-title">
+      <h2 id="add-title">新增任務</h2>
+      <form id="task-form" class="task-form" novalidate>
+        <label for="task-input" class="field-label">任務名稱</label>
+        <div class="input-row">
+          <input
+            type="text"
+            id="task-input"
+            class="task-input"
+            placeholder="例如：完成期末專題"
+            maxlength="100"
+            autocomplete="off">
+          <button type="submit" class="btn btn-primary">新增</button>
+        </div>
+      </form>
+      <p id="error-msg" class="error-msg" role="alert" aria-live="polite"></p>
+    </section>
+    <!-- ★★★ 語意化區域結束 ★★★ -->
+
+    <!-- 篩選區域 -->
+    <section class="card filter-section" aria-labelledby="filter-title">
+      <h2 id="filter-title">篩選</h2>
+      <div class="filters" role="group" aria-label="任務篩選">
+        <button type="button" class="filter-btn active" data-filter="all">全部</button>
+        <button type="button" class="filter-btn" data-filter="active">未完成</button>
+        <button type="button" class="filter-btn" data-filter="completed">已完成</button>
+      </div>
+    </section>
+
+    <!-- 任務清單 -->
+    <section class="card list-section" aria-labelledby="list-title">
+      <h2 id="list-title">任務清單</h2>
+      <ul id="task-list" class="task-list"></ul>
+      <p id="empty-msg" class="empty-msg" hidden>目前沒有符合的任務</p>
+    </section>
+
+    <!-- 統計資訊 -->
+    <section class="card stats-section" aria-label="任務統計">
+      <p id="stats" class="stats"></p>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>© 2026 My Task Manager</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
